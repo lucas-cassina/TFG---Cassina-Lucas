@@ -1,0 +1,63 @@
+/* ===================================================
+   CIAS Design System — Tokens
+   TFG Lucas V. Cassina · Universidad Siglo 21
+   =================================================== */
+
+:root {
+  /* Colores primarios */
+  --color-primary:       #1a3c5e;
+  --color-primary-light: #2563a8;
+  --color-primary-dark:  #0f2540;
+  --color-accent:        #3b82f6;
+
+  /* Semáforo de riesgo */
+  --color-riesgo-bajo:   #27ae60;
+  --color-riesgo-medio:  #f39c12;
+  --color-riesgo-alto:   #e74c3c;
+
+  /* Niveles de incentivo */
+  --color-bronce:  #cd7f32;
+  --color-plata:   #aaa9ad;
+  --color-oro:     #ffd700;
+
+  /* Grises y neutros */
+  --color-bg:        #f4f7fb;
+  --color-surface:   #ffffff;
+  --color-border:    #dce3ed;
+  --color-text:      #1e293b;
+  --color-text-muted:#64748b;
+
+  /* Tipografía */
+  --font-family: 'Inter', system-ui, sans-serif;
+  --font-size-xs:  0.75rem;
+  --font-size-sm:  0.875rem;
+  --font-size-md:  1rem;
+  --font-size-lg:  1.125rem;
+  --font-size-xl:  1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+
+  /* Espaciado */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+
+  /* Bordes */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Sombras */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+
+  /* Transiciones */
+  --transition: 0.2s ease;
+}

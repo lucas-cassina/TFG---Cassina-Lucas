@@ -1,0 +1,24 @@
+{
+  "story_id": "CIAS-002",
+  "title": "Ingesta telemétrica + Motor de índice",
+  "hus": ["HU-003", "HU-004_calc", "HU-007"],
+  "status": "validated",
+  "stages_completed": ["intake","plan","breakdown","implementation","qa","validation"],
+  "done_markers": {
+    "endpoint_abrir_sesion": true,
+    "endpoint_eventos_lote": true,
+    "endpoint_cerrar_sesion": true,
+    "risk_engine_pandas_numpy": true,
+    "alertas_automaticas": true,
+    "obd_simulator": true,
+    "perfiles_prudente_medio_riesgoso": true
+  },
+  "criteria_coverage": {
+    "HU-003_apertura_sesion": true,
+    "HU-003_lote_eventos": true,
+    "HU-003_cierre_calcula_indice": true,
+    "HU-004_cinco_variables_ponderadas": true,
+    "HU-004_niveles_bajo_medio_alto": true,
+    "HU-007_alertas_exceso_frenada_acel": true
+  }
+}

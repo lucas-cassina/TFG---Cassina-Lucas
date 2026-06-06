@@ -1,0 +1,21 @@
+{
+  "story_id": "CIAS-005",
+  "title": "Vistas del auditor + reportes PDF",
+  "hus": ["HU-009", "HU-010"],
+  "status": "validated",
+  "stages_completed": ["intake","plan","design_ui","breakdown","implementation","polish","qa","validation"],
+  "done_markers": {
+    "buscador_dni_poliza": true,
+    "perfil_riesgo_auditor": true,
+    "sidebar_desktop": true,
+    "reporte_pdf_reportlab": true,
+    "descarga_pdf_frontend": true
+  },
+  "criteria_coverage": {
+    "HU-009_busqueda_dni": true,
+    "HU-009_busqueda_poliza": true,
+    "HU-009_perfil_completo": true,
+    "HU-010_pdf_generado": true,
+    "HU-010_pdf_descargable": true
+  }
+}

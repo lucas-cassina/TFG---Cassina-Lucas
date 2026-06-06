@@ -1,0 +1,45 @@
+.incentivos { padding-bottom: 80px; }
+.incentivos__header {
+  background: var(--color-primary); color: #fff;
+  padding: var(--space-5);
+}
+.incentivos__header h1 { font-size: var(--font-size-xl); font-weight: 700; }
+.incentivos__main {
+  padding: var(--space-4); max-width: 600px; margin: 0 auto;
+  display: flex; flex-direction: column; gap: var(--space-4);
+}
+
+.nivel-card { display: flex; align-items: center; gap: var(--space-5); }
+.nivel-icon { font-size: 52px; line-height: 1; }
+.nivel-info { flex: 1; }
+.nivel-nombre { font-size: var(--font-size-2xl); font-weight: 700; color: var(--color-primary); }
+.nivel-desc { font-size: var(--font-size-sm); color: var(--color-text-muted); margin-top: var(--space-1); }
+
+.progresion {
+  display: flex; align-items: center; gap: 0;
+  margin-top: var(--space-4); justify-content: space-between;
+}
+.prog-step {
+  display: flex; flex-direction: column; align-items: center;
+  gap: var(--space-1); position: relative; flex: 1;
+}
+.prog-icono { font-size: 28px; filter: grayscale(1); opacity: 0.4; }
+.prog-step.alcanzado .prog-icono, .prog-step.actual .prog-icono { filter: none; opacity: 1; }
+.prog-label { font-size: var(--font-size-xs); font-weight: 600; color: var(--color-text-muted); }
+.prog-step.alcanzado .prog-label, .prog-step.actual .prog-label { color: var(--color-primary); }
+.prog-linea {
+  position: absolute; top: 14px; left: 60%; width: 80%;
+  height: 2px; background: var(--color-border); z-index: 0;
+}
+
+.incentivos-list { margin-top: var(--space-3); display: flex; flex-direction: column; gap: var(--space-3); }
+.incentivo-item {
+  padding: var(--space-4); border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md); transition: border-color var(--transition);
+}
+.incentivo-item:not(.bloqueado) { border-color: var(--color-riesgo-bajo); }
+.incentivo-header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.incentivo-nombre { font-weight: 600; font-size: var(--font-size-md); }
+.incentivo-desc { font-size: var(--font-size-sm); color: var(--color-text-muted); margin-top: var(--space-1); }
+.incentivo-lock { font-size: var(--font-size-xs); color: var(--color-text-muted); margin-top: var(--space-2); }
+.incentivo-item.bloqueado { opacity: 0.6; }

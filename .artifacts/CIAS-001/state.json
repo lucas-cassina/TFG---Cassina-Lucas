@@ -1,0 +1,25 @@
+{
+  "story_id": "CIAS-001",
+  "title": "Fundación + Autenticación",
+  "hus": ["HU-001", "HU-002", "HU-011", "HU-012"],
+  "status": "validated",
+  "stages_completed": ["intake","plan","design_ui","breakdown","implementation","polish","qa","validation"],
+  "done_markers": {
+    "backend_scaffolding": true,
+    "nine_entities_orm": true,
+    "jwt_auth": true,
+    "token_blocklist": true,
+    "docker_compose": true,
+    "frontend_skeleton": true,
+    "design_system_css": true,
+    "tests_passing": true
+  },
+  "criteria_coverage": {
+    "HU-001_registro_conductor": true,
+    "HU-001_unicidad_dni_email": true,
+    "HU-002_login_jwt": true,
+    "HU-002_credenciales_invalidas_401": true,
+    "HU-011_logout_revoca_token": true,
+    "HU-012_acceso_post_logout_401": true
+  }
+}

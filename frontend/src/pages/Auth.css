@@ -1,0 +1,54 @@
+.auth-bg {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  display: flex; align-items: center; justify-content: center;
+  padding: var(--space-4);
+}
+.auth-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  width: 100%; max-width: 420px;
+  box-shadow: var(--shadow-lg);
+  display: flex; flex-direction: column; gap: var(--space-5);
+}
+.auth-header { text-align: center; }
+.auth-logo { font-size: var(--font-size-3xl); font-weight: 700; color: var(--color-primary); }
+.auth-tagline { font-size: var(--font-size-sm); color: var(--color-text-muted); margin-top: 2px; }
+
+.auth-tabs { display: flex; border-bottom: 2px solid var(--color-border); }
+.auth-tabs button {
+  flex: 1; padding: var(--space-3); background: none;
+  font-size: var(--font-size-sm); font-weight: 500;
+  color: var(--color-text-muted); border-bottom: 2px solid transparent;
+  margin-bottom: -2px; transition: all var(--transition);
+}
+.auth-tabs button.active { color: var(--color-primary-light); border-bottom-color: var(--color-primary-light); }
+
+.auth-form { display: flex; flex-direction: column; gap: var(--space-4); }
+
+.form-group { display: flex; flex-direction: column; gap: var(--space-1); }
+.form-group label { font-size: var(--font-size-sm); font-weight: 500; }
+.form-group input {
+  padding: var(--space-3) var(--space-4);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition);
+}
+.form-group input:focus { outline: none; border-color: var(--color-accent); }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+
+.auth-error {
+  font-size: var(--font-size-sm); color: var(--color-riesgo-alto);
+  background: #fee2e2; padding: var(--space-3); border-radius: var(--radius-md);
+}
+.btn-primary {
+  padding: var(--space-3) var(--space-6);
+  background: var(--color-primary-light); color: #fff;
+  border-radius: var(--radius-md); font-size: var(--font-size-md);
+  font-weight: 600; transition: background var(--transition);
+}
+.btn-primary:hover:not(:disabled) { background: var(--color-primary); }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+.auth-footer { text-align: center; font-size: var(--font-size-sm); color: var(--color-text-muted); }

@@ -1,0 +1,22 @@
+{
+  "story_id": "CIAS-003",
+  "title": "Dashboard del asegurado",
+  "hus": ["HU-004_viz", "HU-005", "HU-006"],
+  "status": "validated",
+  "stages_completed": ["intake","plan","design_ui","breakdown","implementation","polish","qa","validation"],
+  "done_markers": {
+    "gauge_svg": true,
+    "estadisticas_mes": true,
+    "desglose_variables": true,
+    "historial_recharts": true,
+    "filtros_fecha": true,
+    "perfil_conductor": true,
+    "bottom_nav": true
+  },
+  "criteria_coverage": {
+    "HU-004_gauge_indice": true,
+    "HU-005_estadisticas_mes": true,
+    "HU-006_historial_sesiones": true,
+    "HU-006_filtros_fecha": true
+  }
+}
