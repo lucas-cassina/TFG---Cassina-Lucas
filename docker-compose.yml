@@ -12,10 +12,10 @@ services:
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-cias}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-cias} -d ${POSTGRES_DB:-cias_db}"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
 
   backend:
     build: ./backend
