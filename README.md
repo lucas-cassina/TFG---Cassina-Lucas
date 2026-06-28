@@ -202,4 +202,4 @@ cias-sistema/
 
 ---
 
-*TFG Lucas V. Cassina · Universidad Siglo 21 · 2025*
+*TFG Lucas V. Cassina · Universidad Siglo 21 · 2026*
