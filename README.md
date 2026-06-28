@@ -167,7 +167,6 @@ pytest -v
 cias-sistema/
 ├── docker-compose.yml
 ├── .env.example
-├── .artifacts/              # Artifacts del pipeline CIAS-001…005
 ├── backend/
 │   ├── app/
 │   │   ├── core/            # Config, JWT, base de datos
