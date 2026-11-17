@@ -1,63 +1,69 @@
 /* ===================================================
-   CIAS Design System — Tokens
+   CIAS Design System v2 — Tokens
+   Mobile-first · Colores del logo oficial
    TFG Lucas V. Cassina · Universidad Siglo 21
    =================================================== */
-
 :root {
-  /* Colores primarios */
-  --color-primary:       #1a3c5e;
-  --color-primary-light: #2563a8;
-  --color-primary-dark:  #0f2540;
-  --color-accent:        #3b82f6;
+  /* Marca */
+  --brand:          #1A3B6B;
+  --brand-hover:    #16325b;
+  --brand-dark:     #12305a;
+  --accent:         #4A90D9;
+  --accent-hover:   #3f82c7;
+  --accent-bg:      #E6F0FB;
 
-  /* Semáforo de riesgo */
-  --color-riesgo-bajo:   #27ae60;
-  --color-riesgo-medio:  #f39c12;
-  --color-riesgo-alto:   #e74c3c;
+  /* Semáforo riesgo */
+  --ok:      #16A34A; --ok-bg:   #DCFCE7;
+  --warn:    #CA8A04; --warn-bg: #FEF9C3;
+  --danger:  #DC2626; --danger-bg:#FEE2E2;
 
-  /* Niveles de incentivo */
-  --color-bronce:  #cd7f32;
-  --color-plata:   #aaa9ad;
-  --color-oro:     #ffd700;
+  /* Incentivos */
+  --bronce:    #B45309; --bronce-bg:#FEF3C7;
+  --plata:     #64748B; --plata-bg: #F1F5F9;
+  --oro:       #CA8A04; --oro-bg:   #FEF9C3;
 
-  /* Grises y neutros */
-  --color-bg:        #f4f7fb;
-  --color-surface:   #ffffff;
-  --color-border:    #dce3ed;
-  --color-text:      #1e293b;
-  --color-text-muted:#64748b;
+  /* Neutros */
+  --bg:        #F0F4FA;
+  --surface:   #FFFFFF;
+  --surface-2: #F8FAFF;
+  --border:    #E2EAF2;
+  --border-2:  #E2E8F0;
+  --text:      #1C1C2E;
+  --text-2:    #64748B;
+  --text-3:    #94A3B8;
+  --muted:     #CBD5E1;
 
   /* Tipografía */
-  --font-family: 'Inter', system-ui, sans-serif;
-  --font-size-xs:  0.75rem;
-  --font-size-sm:  0.875rem;
-  --font-size-md:  1rem;
-  --font-size-lg:  1.125rem;
-  --font-size-xl:  1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 1.875rem;
+  --font: 'Inter', system-ui, -apple-system, sans-serif;
+  --text-xs:  11px;
+  --text-sm:  13px;
+  --text-md:  15px;
+  --text-lg:  17px;
+  --text-xl:  20px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
 
   /* Espaciado */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 20px;
-  --space-6: 24px;
-  --space-8: 32px;
-  --space-10: 40px;
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px;
+  --s5:20px; --s6:24px; --s8:32px; --s10:40px; --s12:48px;
 
-  /* Bordes */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
-  --radius-full: 9999px;
+  /* Radios */
+  --r-sm:10px; --r-md:14px; --r-lg:16px; --r-xl:32px; --r-full:9999px;
 
   /* Sombras */
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.10);
-  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+  --shadow-xs: 0 1px 1.5px rgba(0,0,0,.10), 0 1px 1px rgba(0,0,0,.10);
+  --shadow-sm: 0 2px 6px rgba(0,0,0,.06);
+  --shadow-md: 0 2px 12px rgba(0,0,0,.06);
+  --shadow-lg: 0 8px 28px rgba(0,0,0,.10);
 
-  /* Transiciones */
-  --transition: 0.2s ease;
+  /* Layout */
+  --nav-h:   77px;
+  --sidebar-w: 240px;
+  --desktop-nav-w: 252px;
+  --desktop-page-max: 1180px;
+  --desktop-wide-max: 1320px;
+  --max-w:   393px;
+
+  --ease: cubic-bezier(.4,0,.2,1);
+  --t: 150ms var(--ease);
 }

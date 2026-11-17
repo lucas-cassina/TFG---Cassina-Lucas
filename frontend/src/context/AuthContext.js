@@ -1,7 +1,7 @@
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { authAPI } from '../api/client';
 
-const AuthContext = createContext(null);
+export const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
@@ -9,7 +9,16 @@ export function AuthProvider({ children }) {
   });
 
   const login = useCallback(async (email, password) => {
-    const resp = await authAPI.loginConductor({ email, password });
+    const resp = await authAPI.login({ email, password });
+    const userData = resp.data;
+    localStorage.setItem('cias_token', userData.access_token);
+    localStorage.setItem('cias_user', JSON.stringify(userData));
+    setUser(userData);
+    return userData;
+  }, []);
+
+  const register = useCallback(async (formData) => {
+    const resp = await authAPI.registroConductor(formData);
     const userData = resp.data;
     localStorage.setItem('cias_token', userData.access_token);
     localStorage.setItem('cias_user', JSON.stringify(userData));
@@ -24,8 +33,19 @@ export function AuthProvider({ children }) {
     setUser(null);
   }, []);
 
+  // B5: el interceptor de axios despacha 'cias:unauthorized' en vez de hacer
+  // window.location.href (que rompe React Router). Acá lo capturamos y ponemos
+  // user en null — RequireAuth redirige a /login sin full page reload.
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      setUser(null);
+    };
+    window.addEventListener('cias:unauthorized', handleUnauthorized);
+    return () => window.removeEventListener('cias:unauthorized', handleUnauthorized);
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, login, register, logout, isAuthenticated: !!user }}>
       {children}
     </AuthContext.Provider>
   );

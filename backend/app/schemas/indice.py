@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 
 
@@ -34,5 +34,31 @@ class HistorialSesionOut(BaseModel):
     indice: Optional[float]
     nivel: Optional[str]
     distancia_km: Optional[float]
+    alertas_count: int = 0
+
+    model_config = {"from_attributes": True}
+
+
+class AlertaOut(BaseModel):
+    tipo_alerta: str
+    descripcion: Optional[str]
+    timestamp: datetime
+
+    model_config = {"from_attributes": True}
+
+
+class SesionDetalleOut(BaseModel):
+    sesion_id: int
+    inicio: datetime
+    fin: Optional[datetime]
+    indice: Optional[float]
+    nivel: Optional[str]
+    distancia_km: Optional[float]
+    puntaje_velocidad: Optional[float]
+    puntaje_frenadas: Optional[float]
+    puntaje_aceleraciones: Optional[float]
+    puntaje_horario: Optional[float]
+    puntaje_distancia: Optional[float]
+    alertas: List[AlertaOut] = []
 
     model_config = {"from_attributes": True}

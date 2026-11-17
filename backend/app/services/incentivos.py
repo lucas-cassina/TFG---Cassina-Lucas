@@ -12,6 +12,18 @@ Reglas:
 from typing import List
 
 NIVELES_ORDEN = ["Sin nivel", "Bronce", "Plata", "Oro"]
+
+
+def historial_nivel_por_mes(indices: list) -> list[str]:
+    """
+    Agrupa una lista de IndiceRiesgo por mes y devuelve el nivel predominante de cada mes.
+    Extrae la lógica duplicada en conductor, reportes y auditor (A4).
+    """
+    meses: dict[str, list[str]] = {}
+    for idx in indices:
+        clave = idx.calculado_en.strftime("%Y-%m")
+        meses.setdefault(clave, []).append(idx.nivel)
+    return [max(set(v), key=v.count) for v in (meses[k] for k in sorted(meses))]
 PUNTOS_POR_MES_BAJO = 10
 PUNTOS_POR_MES_MEDIO = 3
 

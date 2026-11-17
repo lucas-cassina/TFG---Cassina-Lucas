@@ -6,11 +6,12 @@ from datetime import datetime, timezone, timedelta
 from app.core.database import get_db
 from app.api.deps import get_current_auditor
 from app.models.auditor import Auditor
+from app.models.alerta_conduccion import AlertaConduccion
 from app.models.conductor import Conductor
 from app.models.poliza import Poliza
 from app.models.indice_riesgo import IndiceRiesgo
 from app.services.reportes import generar_reporte_pdf
-from app.services.incentivos import calcular_nivel_incentivo
+from app.services.incentivos import calcular_nivel_incentivo, historial_nivel_por_mes
 
 router = APIRouter(prefix="/reportes", tags=["reportes"])
 
@@ -53,11 +54,7 @@ async def reporte_pdf(
         .order_by(IndiceRiesgo.calculado_en.asc())
     )
     todos = res_todos.scalars().all()
-    meses: dict[str, list[str]] = {}
-    for idx in todos:
-        clave = idx.calculado_en.strftime("%Y-%m")
-        meses.setdefault(clave, []).append(idx.nivel)
-    historial_m = [max(set(v), key=v.count) for v in (meses[k] for k in sorted(meses))]
+    historial_m = historial_nivel_por_mes(todos)
     nivel_inc = calcular_nivel_incentivo(historial_m)["nivel_incentivo"]
 
     # Historial de sesiones para el PDF
@@ -70,6 +67,19 @@ async def reporte_pdf(
         }
         for idx in todos[-10:]
     ]
+
+    alertas_res = await db.execute(
+        select(AlertaConduccion).where(
+            AlertaConduccion.conductor_id == conductor_id,
+            AlertaConduccion.timestamp >= hace_6m,
+        ).order_by(AlertaConduccion.timestamp.desc())
+    )
+    alertas_pdf = [{"fecha": a.timestamp.strftime("%d/%m/%Y %H:%M"),
+                    "tipo": a.tipo_alerta, "descripcion": a.descripcion}
+                   for a in alertas_res.scalars().all()]
+    desglose = {nombre: getattr(ultimo, nombre) for nombre in (
+        "puntaje_velocidad", "puntaje_frenadas", "puntaje_aceleraciones",
+        "puntaje_horario", "puntaje_distancia")} if ultimo else {}
 
     datos = {
         "nombre": conductor.nombre,
@@ -87,6 +97,10 @@ async def reporte_pdf(
         "total_km": float(total_km or 0),
         "nivel_incentivo": nivel_inc,
         "historial": historial_pdf,
+        "desglose": desglose,
+        "alertas": alertas_pdf,
+        "periodo_desde": hace_6m.strftime("%d/%m/%Y"),
+        "periodo_hasta": datetime.now(timezone.utc).strftime("%d/%m/%Y"),
     }
 
     pdf_bytes = generar_reporte_pdf(datos)

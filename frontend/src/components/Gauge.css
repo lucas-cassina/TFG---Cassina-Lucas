@@ -2,25 +2,47 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-2);
+  gap: 12px;
 }
-.gauge-svg {
-  width: 200px;
-  height: 110px;
-}
-.gauge-value {
+
+.gauge-wrap {
+  position: relative;
+  width: 120px;
+  height: 120px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  line-height: 1.1;
+  justify-content: center;
 }
+
+.gauge-wrap svg {
+  position: absolute;
+  inset: 0;
+}
+
 .gauge-number {
-  font-size: var(--font-size-3xl);
+  position: relative;
+  z-index: 1;
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.04em;
+  line-height: 40px;
+}
+
+.gauge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 8px 16px;
+  border-radius: var(--r-full);
+  font-size: 14px;
   font-weight: 700;
-}
-.gauge-label {
-  font-size: var(--font-size-sm);
-  font-weight: 600;
+  line-height: 20px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
 }
+
+/* Legacy selectors kept for desktop overrides in Dashboard.css */
+.gauge-ring { display: none; }
+.gauge-label { display: none; }

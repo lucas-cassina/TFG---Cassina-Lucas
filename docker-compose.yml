@@ -26,6 +26,8 @@ services:
     env_file: .env
     volumes:
       - ./backend:/app
+      - ./seed.py:/app/seed.py:ro
+      - ./obd_sim.py:/app/obd_sim.py:ro
     ports:
       - "8000:8000"
     depends_on:

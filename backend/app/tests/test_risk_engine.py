@@ -27,13 +27,22 @@ def test_conductor_prudente():
 
 
 def test_conductor_riesgoso():
-    """Conducción con excesos constantes → índice Alto."""
-    inicio = datetime.now(timezone.utc)
+    """Conducción con excesos constantes en horario nocturno → índice Alto (determinista)."""
+    inicio = datetime(2024, 6, 15, 23, 0, tzinfo=timezone.utc)
     fin = inicio + timedelta(hours=1)
-    eventos = make_eventos(30, velocidad=150.0, acel=5.0, frenada=-8.0)
+    # Timestamps en hora 23 → penalización nocturna máxima → resultado determinista
+    eventos = [
+        {
+            "velocidad_kmh": 150.0,
+            "aceleracion_ms2": 5.0,
+            "frenada_ms2": -8.0,
+            "timestamp": (inicio + timedelta(seconds=i * 30)).isoformat(),
+        }
+        for i in range(30)
+    ]
     res = calcular_indice(eventos, inicio, fin)
-    assert res["nivel"] in ("Medio", "Alto")
-    assert res["indice"] > 50
+    assert res["nivel"] == "Alto"
+    assert res["indice"] > 85
 
 
 def test_sin_eventos():

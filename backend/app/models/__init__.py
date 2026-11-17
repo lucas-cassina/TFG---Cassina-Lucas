@@ -7,3 +7,5 @@ from .indice_riesgo import IndiceRiesgo
 from .alerta_conduccion import AlertaConduccion
 from .incentivo import Incentivo
 from .recompensa import Recompensa
+from .token_revocado import TokenRevocado
+from .historial_contrasena import HistorialContrasena

@@ -1,0 +1,326 @@
+.sesion-detalle {
+  min-height: 100dvh;
+  background: var(--bg);
+  padding-bottom: var(--s8);
+}
+
+/* ── Subnav (back + title) ── */
+.detalle-subnav {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  padding: var(--s4) var(--s5);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.detalle-back {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--brand);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.detalle-back svg {
+  width: 24px;
+  height: 24px;
+}
+
+.detalle-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* ── Content ── */
+.detalle-content {
+  padding: var(--s5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+}
+
+/* ── Hero card ── */
+.detalle-hero {
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--s5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s4);
+}
+
+.hero-nivel {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+}
+
+.hero-emoji {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.hero-fecha {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 6px 0 2px;
+  text-transform: capitalize;
+}
+.hero-hora {
+  font-size: 12px;
+  color: var(--text-2);
+  margin: 0;
+}
+
+.hero-stats {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border-top: 1px solid var(--border-2);
+  padding-top: var(--s4);
+}
+
+.hero-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.hero-stat strong {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.1;
+}
+.hero-stat span {
+  font-size: 11px;
+  color: var(--text-2);
+  text-align: center;
+}
+
+.hero-stat-divider {
+  width: 1px;
+  height: 36px;
+  background: var(--border-2);
+  flex-shrink: 0;
+}
+
+/* ── Risk badge (shared with Historial) ── */
+.nivel-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: var(--r-full);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 18px;
+}
+.nivel-bajo  { background: var(--ok-bg);     color: var(--ok);     }
+.nivel-medio { background: var(--warn-bg);   color: var(--warn);   }
+.nivel-alto  { background: var(--danger-bg); color: var(--danger); }
+
+/* ── Generic section card ── */
+.detalle-card {
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--s5);
+}
+
+.detalle-section-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 4px;
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.detalle-section-sub {
+  font-size: 12px;
+  color: var(--text-2);
+  margin: 0 0 16px;
+}
+
+.alertas-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: var(--r-full);
+  background: var(--danger-bg);
+  color: var(--danger);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ── Puntajes ── */
+.puntajes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.puntaje-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.puntaje-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.puntaje-label {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.puntaje-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.puntaje-desc {
+  font-size: 11px;
+  color: var(--text-3);
+  margin: 0 0 4px;
+}
+
+.puntaje-track {
+  height: 6px;
+  background: var(--border);
+  border-radius: var(--r-full);
+  overflow: hidden;
+}
+.puntaje-fill {
+  height: 100%;
+  border-radius: var(--r-full);
+  transition: width .4s var(--ease);
+}
+.bar-ok     { background: var(--ok);     }
+.bar-warn   { background: var(--warn);   }
+.bar-danger { background: var(--danger); }
+
+/* ── Alertas ── */
+.alertas-empty {
+  font-size: 14px;
+  color: var(--ok);
+  font-weight: 500;
+  margin: var(--s3) 0 0;
+}
+
+.alertas-list {
+  list-style: none;
+  margin: var(--s3) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+}
+
+.alerta-item {
+  display: flex;
+  gap: var(--s3);
+  align-items: flex-start;
+  padding: var(--s3) 0;
+  border-bottom: 1px solid var(--border-2);
+}
+.alerta-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.alerta-icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: var(--r-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--warn-bg);
+  color: var(--warn);
+}
+
+.alerta-item--exceso_velocidad .alerta-icon {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.alerta-item--frenada_brusca .alerta-icon {
+  background: var(--warn-bg);
+  color: var(--warn);
+}
+
+.alerta-item--aceleracion_brusca .alerta-icon {
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.alerta-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.alerta-tipo {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}
+.alerta-desc {
+  font-size: 12px;
+  color: var(--text-2);
+  margin: 0;
+}
+.alerta-time {
+  font-size: 11px;
+  color: var(--text-3);
+  margin: 0;
+}
+
+/* ── Desktop ── */
+@media (min-width: 1024px) {
+  .sesion-detalle {
+    padding: 0 32px 48px calc(var(--desktop-nav-w) + 32px);
+  }
+
+  .sesion-detalle .dashboard-header {
+    margin: 0 -32px;
+    padding: 16px 32px;
+    background: rgba(255,255,255,.9);
+    border-bottom: 1px solid rgba(226,234,242,.85);
+    backdrop-filter: blur(18px);
+    height: 78px;
+  }
+
+  .sesion-detalle .dashboard-brand  { color: var(--brand); }
+  .sesion-detalle .dashboard-subbrand { color: var(--text-2); }
+  .sesion-detalle .dashboard-bell-btn { color: var(--brand); background: var(--accent-bg); }
+
+  .detalle-subnav {
+    padding: var(--s4) 0;
+    background: transparent;
+    border-bottom: none;
+  }
+
+  .detalle-content {
+    padding: 32px 0 0;
+    max-width: 640px;
+  }
+}

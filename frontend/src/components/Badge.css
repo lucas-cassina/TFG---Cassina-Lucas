@@ -1,13 +1,14 @@
-.badge {
-  display: inline-flex; align-items: center;
-  padding: 2px 10px; border-radius: var(--radius-full);
-  font-size: var(--font-size-xs); font-weight: 600;
-  text-transform: uppercase; letter-spacing: 0.04em;
+.badge{
+  display:inline-flex;align-items:center;
+  padding:4px 12px;border-radius:var(--r-full);
+  font-size:12px;font-weight:700;
+  letter-spacing:0;text-transform:uppercase;white-space:nowrap;
+  line-height:16px;
 }
-.badge--bajo    { background: #dcfce7; color: var(--color-riesgo-bajo); }
-.badge--medio   { background: #fef3c7; color: var(--color-riesgo-medio); }
-.badge--alto    { background: #fee2e2; color: var(--color-riesgo-alto); }
-.badge--bronce  { background: #fdf2e9; color: var(--color-bronce); }
-.badge--plata   { background: #f8f9fa; color: var(--color-plata); }
-.badge--oro     { background: #fffde7; color: #b8860b; }
-.badge--default { background: var(--color-border); color: var(--color-text-muted); }
+.badge--bajo   {background:var(--ok-bg);   color:var(--ok)}
+.badge--medio  {background:var(--warn-bg); color:var(--warn)}
+.badge--alto   {background:var(--danger-bg);color:var(--danger)}
+.badge--bronce {background:var(--bronce-bg);color:var(--bronce)}
+.badge--plata  {background:var(--plata-bg); color:var(--plata)}
+.badge--oro    {background:var(--oro-bg);   color:var(--oro)}
+.badge--default{background:var(--accent-bg);color:var(--accent)}

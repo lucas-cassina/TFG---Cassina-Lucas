@@ -14,3 +14,38 @@ class ConductorOut(BaseModel):
     created_at: datetime
 
     model_config = {"from_attributes": True}
+
+
+class PolizaOut(BaseModel):
+    id: int
+    numero_poliza: str
+    marca_vehiculo: str
+    modelo_vehiculo: str
+    anio_vehiculo: int
+    patente: str
+    zona: Optional[str] = None
+    fecha_inicio: date
+    fecha_vencimiento: date
+
+    model_config = {"from_attributes": True}
+
+
+class PerfilConductorOut(BaseModel):
+    conductor: ConductorOut
+    poliza: Optional[PolizaOut] = None
+
+
+class PolizaIn(BaseModel):
+    numero_poliza: str
+    marca_vehiculo: str
+    modelo_vehiculo: str
+    anio_vehiculo: int
+    patente: str
+    zona: Optional[str] = None
+    fecha_inicio: date
+    fecha_vencimiento: date
+
+
+class CambioContrasenaRequest(BaseModel):
+    contrasena_actual: str
+    contrasena_nueva: str

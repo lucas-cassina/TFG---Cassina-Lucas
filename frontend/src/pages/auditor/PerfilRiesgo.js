@@ -13,45 +13,43 @@ export default function PerfilRiesgo() {
   const navigate = useNavigate();
   const [perfil, setPerfil] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [descargando, setDescargando] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     auditorAPI.perfilRiesgo(id)
       .then(r => setPerfil(r.data))
-      .catch(() => navigate('/auditor/buscador'))
+      .catch(() => setError('No pudimos cargar el perfil de riesgo solicitado.'))
       .finally(() => setLoading(false));
   }, [id]);
 
-  const descargarPDF = async () => {
-    setDescargando(true);
-    try {
-      const resp = await auditorAPI.reportePDF(id);
-      const url = URL.createObjectURL(new Blob([resp.data], { type: 'application/pdf' }));
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `reporte_riesgo_${perfil?.dni}_${new Date().toISOString().slice(0,10)}.pdf`;
-      a.click();
-      URL.revokeObjectURL(url);
-    } catch (err) {
-      alert('Error al generar el reporte PDF.');
-    } finally {
-      setDescargando(false);
-    }
-  };
-
   if (loading) return <div className="auditor-layout"><Sidebar /><main className="auditor-main"><Spinner /></main></div>;
+  if (error) return (
+    <div className="auditor-layout">
+      <Sidebar />
+      <main className="auditor-main">
+        <Card>
+          <p className="form-error">{error}</p>
+          <button className="btn-back" onClick={() => navigate('/auditor/buscador')}>Volver al buscador</button>
+        </Card>
+      </main>
+    </div>
+  );
 
   return (
     <div className="auditor-layout">
       <Sidebar />
       <main className="auditor-main">
+        <div className="auditor-topbar">
+          <span>Auditoría / {perfil?.nombre} {perfil?.apellido} / Perfil de riesgo</span>
+          <div><strong>● Sesión activa</strong><span>Auditor CIAS</span></div>
+        </div>
         <div className="perfil-riesgo-header">
           <button className="btn-back" onClick={() => navigate('/auditor/buscador')}>← Volver</button>
           <h1 className="auditor-page-title">
             {perfil?.nombre} {perfil?.apellido}
           </h1>
-          <button className="btn-pdf" onClick={descargarPDF} disabled={descargando}>
-            {descargando ? 'Generando…' : '📄 Descargar PDF'}
+          <button className="btn-pdf" onClick={() => navigate(`/auditor/reporte/${id}`)}>
+            📄 Generar reporte PDF
           </button>
         </div>
 
@@ -59,9 +57,9 @@ export default function PerfilRiesgo() {
           {/* Gauge */}
           <Card className="gauge-card-auditor">
             <h2 className="section-title">Índice de riesgo actual</h2>
-            <Gauge value={perfil?.indice_actual ?? 0} nivel={perfil?.nivel_actual ?? 'Bajo'} />
+            <Gauge value={perfil?.indice_actual ?? 0} nivel={perfil?.nivel_actual ?? 'Sin datos'} />
             {perfil?.indice_promedio_6m != null && (
-              <p className="promedio-6m">Promedio 6 meses: <strong>{perfil.indice_promedio_6m}</strong></p>
+              <p className="promedio-6m">Promedio 180 días: <strong>{perfil.indice_promedio_6m}</strong></p>
             )}
           </Card>
 

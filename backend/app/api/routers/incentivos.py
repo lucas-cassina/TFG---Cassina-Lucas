@@ -2,12 +2,15 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from datetime import datetime, timezone
+from typing import List
 from app.core.database import get_db
 from app.api.deps import get_current_conductor
 from app.models.conductor import Conductor
 from app.models.indice_riesgo import IndiceRiesgo
 from app.models.incentivo import Incentivo
-from app.services.incentivos import calcular_nivel_incentivo, nivel_para_incentivo
+from app.models.recompensa import Recompensa
+from app.schemas.incentivo import RecompensaOut
+from app.services.incentivos import calcular_nivel_incentivo, nivel_para_incentivo, historial_nivel_por_mes
 
 router = APIRouter(prefix="/incentivos", tags=["incentivos"])
 
@@ -18,28 +21,42 @@ async def mi_nivel_incentivo(
     db: AsyncSession = Depends(get_db),
 ):
     """HU-008: Nivel de incentivo actual del conductor y puntos."""
-    # Obtener historial de índices ordenado cronológicamente (1 por mes)
     res = await db.execute(
         select(IndiceRiesgo)
         .where(IndiceRiesgo.conductor_id == conductor.id)
         .order_by(IndiceRiesgo.calculado_en.asc())
     )
     todos = res.scalars().all()
+    resultado = calcular_nivel_incentivo(historial_nivel_por_mes(todos))
+    nivel_alcanzado = resultado["nivel_incentivo"]
 
-    # Agrupar por mes: tomar el índice promedio de cada mes
-    meses: dict[str, list[str]] = {}
-    for idx in todos:
-        clave = idx.calculado_en.strftime("%Y-%m")
-        meses.setdefault(clave, []).append(idx.nivel)
+    # Auto-otorgar Recompensa si el conductor alcanzó un nivel nuevo (HU-008)
+    if nivel_alcanzado != "Sin nivel":
+        ya_existe = await db.execute(
+            select(Recompensa).where(
+                Recompensa.conductor_id == conductor.id,
+                Recompensa.nivel_alcanzado == nivel_alcanzado,
+            )
+        )
+        if not ya_existe.scalars().first():
+            # Buscar el Incentivo correspondiente al nivel
+            res_inc = await db.execute(
+                select(Incentivo).where(
+                    Incentivo.nivel_requerido == nivel_alcanzado,
+                    Incentivo.activo == True,
+                ).limit(1)
+            )
+            incentivo = res_inc.scalar_one_or_none()
+            nueva_recompensa = Recompensa(
+                conductor_id=conductor.id,
+                incentivo_id=incentivo.id if incentivo else None,
+                nivel_alcanzado=nivel_alcanzado,
+                puntos_acumulados=resultado["puntos_acumulados"],
+                meses_consecutivos_bajo=resultado["meses_consecutivos_bajo"],
+            )
+            db.add(nueva_recompensa)
+            await db.commit()
 
-    historial_meses = []
-    for clave in sorted(meses.keys()):
-        niveles_mes = meses[clave]
-        # Nivel predominante del mes
-        nivel_mes = max(set(niveles_mes), key=niveles_mes.count)
-        historial_meses.append(nivel_mes)
-
-    resultado = calcular_nivel_incentivo(historial_meses)
     return resultado
 
 
@@ -67,3 +84,17 @@ async def incentivos_disponibles(
         for inc in todos
     ]
     return {"nivel_actual": nivel_actual, "incentivos": disponibles}
+
+
+@router.get("/mis-recompensas", response_model=List[RecompensaOut])
+async def mis_recompensas(
+    conductor: Conductor = Depends(get_current_conductor),
+    db: AsyncSession = Depends(get_db),
+):
+    """HU-008: Lista de recompensas (niveles) obtenidos por el conductor."""
+    res = await db.execute(
+        select(Recompensa)
+        .where(Recompensa.conductor_id == conductor.id)
+        .order_by(Recompensa.otorgada_en.desc())
+    )
+    return res.scalars().all()

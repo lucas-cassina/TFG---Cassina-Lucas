@@ -14,14 +14,16 @@ client.interceptors.request.use((config) => {
   return config;
 });
 
-// Redirigir al login en 401
+// En 401: limpiar credenciales y notificar via evento custom (B5).
+// AuthContext escucha 'cias:unauthorized' y llama setUser(null),
+// lo que hace que RequireAuth redirija a /login sin full page reload.
 client.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err.response?.status === 401) {
       localStorage.removeItem('cias_token');
       localStorage.removeItem('cias_user');
-      window.location.href = '/login';
+      window.dispatchEvent(new CustomEvent('cias:unauthorized'));
     }
     return Promise.reject(err);
   }
@@ -31,11 +33,10 @@ export default client;
 
 /* ── Auth ── */
 export const authAPI = {
-  loginConductor:   (data) => client.post('/auth/login', data),
-  registroConductor:(data) => client.post('/auth/registro/conductor', data),
-  loginAuditor:     (data) => client.post('/auth/login', data),
-  registroAuditor:  (data) => client.post('/auth/registro/auditor', data),
-  logout:           ()     => client.post('/auth/logout'),
+  login:             (data) => client.post('/auth/login', data),
+  registroConductor: (data) => client.post('/auth/registro/conductor', data),
+  registroAuditor:   (data) => client.post('/auth/registro/auditor', data),
+  logout:            ()     => client.post('/auth/logout'),
 };
 
 /* ── Índice ── */
@@ -43,22 +44,36 @@ export const indiceAPI = {
   actual:          () => client.get('/indice/actual'),
   estadisticasMes: () => client.get('/indice/estadisticas-mes'),
   historial:       (params) => client.get('/indice/historial', { params }),
+  detalleSesion:   (id) => client.get(`/indice/historial/${id}`),
+};
+
+/* ── Conductor ── */
+export const conductorAPI = {
+  perfil:          () => client.get('/conductor/perfil'),
+  polizaPDF:       () => client.get('/conductor/poliza/pdf', { responseType: 'blob' }),
+  estadisticasPDF: () => client.get('/conductor/estadisticas/pdf', { responseType: 'blob' }),
+  cargarPoliza:    (data) => client.post('/conductor/poliza', data),
 };
 
 /* ── Incentivos ── */
 export const incentivosAPI = {
-  miNivel:      () => client.get('/incentivos/mi-nivel'),
-  disponibles:  () => client.get('/incentivos/disponibles'),
+  miNivel:     () => client.get('/incentivos/mi-nivel'),
+  disponibles: () => client.get('/incentivos/disponibles'),
 };
 
 /* ── Auditor ── */
 export const auditorAPI = {
-  buscarAsegurado:  (data)       => client.post('/auditor/buscar-asegurado', data),
-  perfilRiesgo:     (id)         => client.get(`/auditor/perfil-riesgo/${id}`),
-  reportePDF:       (id)         => client.get(`/reportes/conductor/${id}/pdf`, { responseType: 'blob' }),
+  buscarAsegurado: (data) => client.post('/auditor/buscar-asegurado', data),
+  perfilRiesgo:    (id)   => client.get(`/auditor/perfil-riesgo/${id}`),
+  reportePDF:      (id)   => client.get(`/reportes/conductor/${id}/pdf`, { responseType: 'blob' }),
 };
 
 /* ── Telemetría ── */
 export const telemetriaAPI = {
-  alertas: () => client.get('/telemetria/alertas'),
+  obtenerSseToken: ()     => client.post('/telemetria/sse-token'),
+  abrirSesion:     (data = {}) => client.post('/telemetria/sesion/abrir', data),
+  enviarEventos:   (data) => client.post('/telemetria/eventos', data),
+  cerrarSesion:    (data) => client.post('/telemetria/sesion/cerrar', data),
+  alertas:         ()     => client.get('/telemetria/alertas'),
+  sesionActiva:    ()     => client.get('/telemetria/sesion/activa'),
 };

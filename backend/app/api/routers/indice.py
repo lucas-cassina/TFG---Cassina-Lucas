@@ -3,13 +3,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from datetime import datetime, timezone
 from typing import Optional
+from zoneinfo import ZoneInfo
 from app.core.database import get_db
 from app.api.deps import get_current_conductor
 from app.models.conductor import Conductor
 from app.models.indice_riesgo import IndiceRiesgo
 from app.models.sesion_conduccion import SesionConduccion
 from app.models.alerta_conduccion import AlertaConduccion
-from app.schemas.indice import IndiceRiesgoOut, EstadisticasMesOut, HistorialSesionOut
+from app.schemas.indice import IndiceRiesgoOut, EstadisticasMesOut, HistorialSesionOut, SesionDetalleOut, AlertaOut
 
 router = APIRouter(prefix="/indice", tags=["índice de riesgo"])
 
@@ -35,8 +36,8 @@ async def estadisticas_mes(
     db: AsyncSession = Depends(get_db),
 ):
     """HU-005: Estadísticas del mes en curso."""
-    now = datetime.now(timezone.utc)
-    inicio_mes = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    now = datetime.now(ZoneInfo("America/Argentina/Cordoba"))
+    inicio_mes = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0).astimezone(timezone.utc)
 
     # Índices del mes
     res = await db.execute(
@@ -84,8 +85,15 @@ async def historial_sesiones(
     desde: Optional[datetime] = Query(None),
     hasta: Optional[datetime] = Query(None),
     limite: int = Query(30, ge=1, le=100),
+    offset: int = Query(0, ge=0),
 ):
     """HU-006: Historial de sesiones con filtros de fecha."""
+    filters = [SesionConduccion.conductor_id == conductor.id]
+    if desde:
+        filters.append(SesionConduccion.inicio >= desde)
+    if hasta:
+        filters.append(SesionConduccion.inicio <= hasta)
+
     query = (
         select(
             SesionConduccion.id.label("sesion_id"),
@@ -94,16 +102,67 @@ async def historial_sesiones(
             IndiceRiesgo.indice,
             IndiceRiesgo.nivel,
             IndiceRiesgo.distancia_km,
+            func.count(AlertaConduccion.id).label("alertas_count"),
         )
         .outerjoin(IndiceRiesgo, IndiceRiesgo.sesion_id == SesionConduccion.id)
-        .where(SesionConduccion.conductor_id == conductor.id)
+        .outerjoin(AlertaConduccion, AlertaConduccion.sesion_id == SesionConduccion.id)
+        .where(*filters)
+        .group_by(
+            SesionConduccion.id,
+            SesionConduccion.inicio,
+            SesionConduccion.fin,
+            IndiceRiesgo.indice,
+            IndiceRiesgo.nivel,
+            IndiceRiesgo.distancia_km,
+        )
+        .order_by(SesionConduccion.inicio.desc(), SesionConduccion.id.desc())
+        .offset(offset)
+        .limit(limite)
     )
-    if desde:
-        query = query.where(SesionConduccion.inicio >= desde)
-    if hasta:
-        query = query.where(SesionConduccion.inicio <= hasta)
-    query = query.order_by(SesionConduccion.inicio.desc()).limit(limite)
 
     res = await db.execute(query)
     rows = res.mappings().all()
     return [HistorialSesionOut(**r) for r in rows]
+
+
+@router.get("/historial/{sesion_id}", response_model=SesionDetalleOut)
+async def detalle_sesion(
+    sesion_id: int,
+    conductor: Conductor = Depends(get_current_conductor),
+    db: AsyncSession = Depends(get_db),
+):
+    """HU-006: Detalle completo de una sesión: índice, puntajes y alertas."""
+    from fastapi import HTTPException
+
+    res = await db.execute(
+        select(
+            SesionConduccion.id.label("sesion_id"),
+            SesionConduccion.inicio,
+            SesionConduccion.fin,
+            IndiceRiesgo.indice,
+            IndiceRiesgo.nivel,
+            IndiceRiesgo.distancia_km,
+            IndiceRiesgo.puntaje_velocidad,
+            IndiceRiesgo.puntaje_frenadas,
+            IndiceRiesgo.puntaje_aceleraciones,
+            IndiceRiesgo.puntaje_horario,
+            IndiceRiesgo.puntaje_distancia,
+        )
+        .outerjoin(IndiceRiesgo, IndiceRiesgo.sesion_id == SesionConduccion.id)
+        .where(
+            SesionConduccion.id == sesion_id,
+            SesionConduccion.conductor_id == conductor.id,
+        )
+    )
+    row = res.mappings().one_or_none()
+    if row is None:
+        raise HTTPException(status_code=404, detail="Sesión no encontrada")
+
+    res_alertas = await db.execute(
+        select(AlertaConduccion.tipo_alerta, AlertaConduccion.descripcion, AlertaConduccion.timestamp)
+        .where(AlertaConduccion.sesion_id == sesion_id)
+        .order_by(AlertaConduccion.timestamp.asc())
+    )
+    alertas = [AlertaOut(**a) for a in res_alertas.mappings().all()]
+
+    return SesionDetalleOut(**dict(row), alertas=alertas)

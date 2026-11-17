@@ -9,7 +9,10 @@ from app.models.poliza import Poliza
 from app.models.indice_riesgo import IndiceRiesgo
 from app.models.sesion_conduccion import SesionConduccion
 from app.schemas.auditor import BusquedaAseguradoRequest, PerfilRiesgoAuditorOut
-from app.services.incentivos import calcular_nivel_incentivo
+from app.schemas.conductor import CambioContrasenaRequest
+from app.services.incentivos import calcular_nivel_incentivo, historial_nivel_por_mes
+from app.core.security import hash_password, verify_password
+from app.services.passwords import guardar_contrasena, es_contrasena_reutilizada
 
 router = APIRouter(prefix="/auditor", tags=["auditor"])
 
@@ -84,11 +87,7 @@ async def perfil_riesgo(
         .order_by(IndiceRiesgo.calculado_en.asc())
     )
     todos_idx = res_todos.scalars().all()
-    meses: dict[str, list[str]] = {}
-    for idx in todos_idx:
-        clave = idx.calculado_en.strftime("%Y-%m")
-        meses.setdefault(clave, []).append(idx.nivel)
-    historial_m = [max(set(v), key=v.count) for v in (meses[k] for k in sorted(meses))]
+    historial_m = historial_nivel_por_mes(todos_idx)
     nivel_inc = calcular_nivel_incentivo(historial_m)["nivel_incentivo"]
 
     return PerfilRiesgoAuditorOut(
@@ -107,3 +106,25 @@ async def perfil_riesgo(
         total_km=float(total_km or 0),
         nivel_incentivo=nivel_inc,
     )
+
+
+@router.put("/cambiar-contrasena", status_code=204)
+async def cambiar_contrasena(
+    data: CambioContrasenaRequest,
+    auditor: Auditor = Depends(get_current_auditor),
+    db: AsyncSession = Depends(get_db),
+):
+    """Cambio de contraseña para auditores con validación de reutilización (últimas 3)."""
+    if not verify_password(data.contrasena_actual, auditor.hashed_password):
+        raise HTTPException(status_code=400, detail="La contraseña actual es incorrecta")
+
+    if await es_contrasena_reutilizada(auditor.id, "auditor", data.contrasena_nueva, db):
+        raise HTTPException(
+            status_code=400,
+            detail="No podés reutilizar ninguna de tus últimas 3 contraseñas",
+        )
+
+    auditor.hashed_password = hash_password(data.contrasena_nueva)
+    await guardar_contrasena(auditor.id, "auditor", auditor.hashed_password, db)
+    await db.commit()
+    return None

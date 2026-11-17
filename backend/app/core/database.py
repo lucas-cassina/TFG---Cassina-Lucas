@@ -37,4 +37,5 @@ async def create_tables():
         from app.models import conductor, auditor, poliza, sesion_conduccion  # noqa
         from app.models import evento_telemetrico, indice_riesgo, alerta_conduccion  # noqa
         from app.models import incentivo, recompensa  # noqa
+        from app.models import token_revocado, historial_contrasena  # noqa
         await conn.run_sync(Base.metadata.create_all)

@@ -33,6 +33,7 @@ class CierreSesionRequest(BaseModel):
 
 class AlertaOut(BaseModel):
     id: int
+    sesion_id: int
     tipo_alerta: str
     descripcion: str
     timestamp: datetime

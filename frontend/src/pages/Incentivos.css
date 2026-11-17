@@ -1,45 +1,513 @@
-.incentivos { padding-bottom: 80px; }
-.incentivos__header {
-  background: var(--color-primary); color: #fff;
-  padding: var(--space-5);
+/* ===== INCENTIVOS PAGE ===== */
+.incentivos {
+  min-height: 100dvh;
+  background: var(--bg);
+  padding-bottom: calc(var(--nav-h) + var(--s6));
 }
-.incentivos__header h1 { font-size: var(--font-size-xl); font-weight: 700; }
-.incentivos__main {
-  padding: var(--space-4); max-width: 600px; margin: 0 auto;
-  display: flex; flex-direction: column; gap: var(--space-4);
-}
-
-.nivel-card { display: flex; align-items: center; gap: var(--space-5); }
-.nivel-icon { font-size: 52px; line-height: 1; }
-.nivel-info { flex: 1; }
-.nivel-nombre { font-size: var(--font-size-2xl); font-weight: 700; color: var(--color-primary); }
-.nivel-desc { font-size: var(--font-size-sm); color: var(--color-text-muted); margin-top: var(--space-1); }
-
-.progresion {
-  display: flex; align-items: center; gap: 0;
-  margin-top: var(--space-4); justify-content: space-between;
-}
-.prog-step {
-  display: flex; flex-direction: column; align-items: center;
-  gap: var(--space-1); position: relative; flex: 1;
-}
-.prog-icono { font-size: 28px; filter: grayscale(1); opacity: 0.4; }
-.prog-step.alcanzado .prog-icono, .prog-step.actual .prog-icono { filter: none; opacity: 1; }
-.prog-label { font-size: var(--font-size-xs); font-weight: 600; color: var(--color-text-muted); }
-.prog-step.alcanzado .prog-label, .prog-step.actual .prog-label { color: var(--color-primary); }
-.prog-linea {
-  position: absolute; top: 14px; left: 60%; width: 80%;
-  height: 2px; background: var(--color-border); z-index: 0;
+.incentivos--loading { display: block; }
+.incentivos-loading {
+  min-height: 60dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.incentivos-list { margin-top: var(--space-3); display: flex; flex-direction: column; gap: var(--space-3); }
-.incentivo-item {
-  padding: var(--space-4); border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-md); transition: border-color var(--transition);
+
+/* ===== POINTS CARD ===== */
+.points-card {
+  margin: 20px 16px 24px;
+  border-radius: 20px;
+  background: linear-gradient(142.78deg, #1a3b6b 0%, #2563EB 100%);
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1);
+  color: #fff;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
 }
-.incentivo-item:not(.bloqueado) { border-color: var(--color-riesgo-bajo); }
-.incentivo-header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
-.incentivo-nombre { font-weight: 600; font-size: var(--font-size-md); }
-.incentivo-desc { font-size: var(--font-size-sm); color: var(--color-text-muted); margin-top: var(--space-1); }
-.incentivo-lock { font-size: var(--font-size-xs); color: var(--color-text-muted); margin-top: var(--space-2); }
-.incentivo-item.bloqueado { opacity: 0.6; }
+.points-deco {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  width: 64px;
+  height: 64px;
+  background: rgba(255,255,255,.18);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,.7);
+}
+.points-label {
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: rgba(255,255,255,.7);
+  font-size: 12px;
+  margin: 0 0 8px;
+}
+.points-main {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.points-star { font-size: 36px; line-height: 1; }
+.points-num  { font-size: 42px; font-weight: 700; line-height: 1.1; letter-spacing: -.04em; }
+.points-unit { font-size: 20px; font-weight: 700; line-height: 1.5; color: rgba(255,255,255,.8); }
+.points-name { font-size: 14px; color: rgba(255,255,255,.8); margin: 0 0 10px; }
+.points-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 16px;
+  border-radius: 9999px;
+  background: #fff;
+  color: var(--brand);
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 32px;
+}
+.points-divider {
+  height: 1px;
+  background: rgba(255,255,255,.2);
+  margin-bottom: 20px;
+}
+.points-meta {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  color: #BFD7F2;
+  font-size: 12px;
+  line-height: 16px;
+}
+.points-stat {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.points-stat-icon {
+  flex-shrink: 0;
+  opacity: 0.8;
+  display: flex;
+}
+.points-stat-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.points-stat-label {
+  font-size: 11px;
+  color: rgba(191,215,242,.75);
+  line-height: 14px;
+  white-space: nowrap;
+}
+.points-stat-text strong {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 17px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.points-stat-divider {
+  width: 1px;
+  height: 32px;
+  background: rgba(255,255,255,.2);
+  flex-shrink: 0;
+  margin: 0 16px;
+}
+
+/* ===== ERROR ===== */
+.incentivos-error {
+  margin: 0 16px 20px;
+  padding: 12px;
+  border-radius: 10px;
+  background: var(--danger-bg);
+  color: var(--danger);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+/* ===== PROGRESS SECTION ===== */
+.incentivos-progress {
+  margin: 0 16px 24px;
+}
+.incentivos-progress h2 {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: var(--text);
+  margin: 0 0 12px;
+}
+.incentivos-track {
+  position: relative;
+  height: 14px;
+  border-radius: 9999px;
+  background: #e2e8f0;
+  overflow: visible;
+}
+.incentivos-track-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4a90d9, #1a3b6b);
+  border-radius: 9999px;
+}
+.incentivos-track-thumb {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,.1), 0 4px 6px rgba(0,0,0,.1);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.incentivos-progress-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-2);
+  font-size: 12px;
+  margin-top: 8px;
+  margin-bottom: 12px;
+}
+.incentivos-progress-row strong { color: var(--brand); font-weight: 600; }
+
+.incentivos-tip {
+  background: #fff;
+  border-left: 2px solid #4a90d9;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.incentivos-tip-sub {
+  color: var(--text-2);
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+/* ===== BENEFITS CONTENT ===== */
+.incentivos-content {
+  padding: 0 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.section-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-2);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin: 0 0 4px;
+}
+
+/* ===== BENEFIT CARD ===== */
+.benefit-card {
+  background: #fff;
+  border-radius: 14px;
+  border-top: 3.6px solid var(--nivel-border, #e2e8f0);
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+  overflow: hidden;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.benefit-card--locked {
+  background: var(--surface-2);
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+  opacity: 0.7;
+}
+.benefit-card--current {
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1);
+}
+
+.benefit-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.benefit-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.benefit-emoji { font-size: 24px; line-height: 1; }
+.benefit-level-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}
+.benefit-card--locked .benefit-level-name { color: var(--text-2); }
+
+/* Level state badges */
+.nivel-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.nivel-badge--alcanzado { background: #dcfce7; color: #16a34a; }
+.nivel-badge--actual    { background: #eff6ff; color: var(--brand); font-weight: 700; }
+.nivel-badge--locked    { background: #f1f5f9; color: var(--text-2); }
+
+.benefit-req {
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 16px;
+  margin: 0;
+}
+.benefit-req strong { color: var(--text-2); }
+.benefit-card--locked .benefit-req { color: var(--text-3); }
+
+/* Benefit list */
+.benefit-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.benefit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--text);
+}
+.benefit-item--locked { color: var(--text-2); }
+.benefit-item-icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0;
+}
+
+/* Footer: current level */
+.benefit-footer {
+  border-top: 1px solid var(--border-2);
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.benefit-footer-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--brand);
+  margin: 0;
+}
+.benefit-footer-desc {
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 16px;
+  margin: 0;
+}
+
+/* Footer: already achieved */
+.benefit-date {
+  font-size: 12px;
+  font-style: italic;
+  color: var(--text-2);
+  margin: 0;
+}
+
+/* Footer: locked Oro link */
+.benefit-link {
+  font-size: 12px;
+  color: var(--brand);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ===== INFO SECTION ===== */
+.info-section {
+  margin: 0 16px 24px;
+  background: var(--bg);
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.info-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+}
+.info-header strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+.info-header-icon {
+  color: var(--text-2);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+.info-intro {
+  font-size: 12px;
+  line-height: 19px;
+  color: var(--text-2);
+  margin: 0;
+}
+.info-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px;
+}
+.info-card-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+.info-list {
+  list-style: none;
+  padding: 0 0 0 8px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 19px;
+}
+.info-link {
+  font-size: 12px;
+  color: var(--brand);
+  text-decoration: none;
+  align-self: flex-start;
+}
+
+/* ===== DESKTOP ===== */
+@media (min-width: 1024px) {
+  .incentivos {
+    padding: 0 32px 48px calc(var(--desktop-nav-w) + 32px);
+    display: grid;
+    grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+  }
+
+  .incentivos--loading { display: block; }
+  .incentivos--loading .incentivos-loading { min-height: 100dvh; }
+
+  .incentivos .dashboard-header {
+    grid-column: 1 / -1;
+    margin: 0 -32px;
+    height: 78px;
+    padding: 16px 32px;
+    background: rgba(255,255,255,.9);
+    border-bottom: 1px solid rgba(226,234,242,.85);
+    backdrop-filter: blur(18px);
+    top: 0;
+  }
+  .incentivos .dashboard-brand   { color: var(--brand); }
+  .incentivos .dashboard-subbrand { color: var(--text-2); }
+  .incentivos .dashboard-bell-btn { color: var(--brand); background: var(--accent-bg); }
+
+  .points-card {
+    margin: 32px 0 0;
+    border-radius: 26px;
+    padding: 34px;
+    position: sticky;
+    top: 102px;
+    min-height: 320px;
+  }
+  .points-num { font-size: 62px; line-height: 1.05; }
+  .points-star { font-size: 48px; }
+  .points-meta { margin-top: 4px; gap: 20px; }
+
+  .incentivos-error {
+    grid-column: 1 / -1;
+    margin: 0;
+  }
+
+  .incentivos-progress {
+    margin: 32px 0 0;
+    padding: 28px;
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+  .incentivos-progress h2 {
+    font-size: 18px;
+    line-height: 26px;
+    margin-bottom: 16px;
+  }
+  .incentivos-track { height: 16px; }
+  .incentivos-progress-row { font-size: 13px; }
+  .incentivos-tip { font-size: 13px; line-height: 20px; padding: 16px; }
+
+  .incentivos-content {
+    grid-column: 1 / -1;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .section-label {
+    grid-column: 1 / -1;
+    margin: 8px 0 0;
+    font-size: 13px;
+  }
+
+  .benefit-card {
+    min-height: 260px;
+    padding: 24px;
+    border-radius: 20px;
+    border-top-width: 4px;
+  }
+  .benefit-item { font-size: 13px; line-height: 18px; }
+  .benefit-req  { font-size: 13px; line-height: 18px; }
+  .benefit-footer-desc { font-size: 13px; line-height: 18px; }
+
+  .info-section {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 28px;
+    border-radius: 22px;
+  }
+  .info-header strong { font-size: 16px; }
+  .info-intro { font-size: 13px; line-height: 20px; }
+  .info-list  { font-size: 13px; line-height: 20px; }
+  .info-card  { padding: 16px; }
+}
+
+@media (min-width: 1400px) {
+  .incentivos {
+    grid-template-columns: 440px minmax(620px, 1fr);
+    padding-right: 64px;
+    padding-left: calc(var(--desktop-nav-w) + 64px);
+  }
+  .incentivos .dashboard-header {
+    margin-right: -64px;
+    margin-left: -64px;
+    padding-right: 64px;
+    padding-left: 64px;
+  }
+  .incentivos-content { gap: 22px; }
+}
